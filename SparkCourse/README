@@ -1,0 +1,63 @@
+Movie Recommender System:
+Movie recommender system is a system that predicts  movie  that the user would like to watch based on the movie previously watched and rated by the user.We have built movie recommendation system by implementing User-User based collaborative filtering, Item-Item based collaborative filtering and Alternating least square(ALS) algorithm.
+At last we will then compare three different approaches as mentioned above to find out which approach works the best to recommend movie to users from movie lens dataset based on the RMSE score of each technique.We have used big data technology for faster processing of large dataset.The data set  which we used for the movie recommender system is Movie Lens (ml-25m) dataset.
+
+Dataset and file used:
+
+We have used Movie Lens dataset for Movie Recommender System.The dataset contains multiple collections of file from group lens.org website such as genome-scores.csv, genome-tags.csv, links.csv, movies.csv, ratings.csv, tags.csv. But out of these files we have used movies.csv and ratings.csv dataset in our movie recommender system.
+
+
+Technologies Used:
+
+Microsoft Azure,Hadoop, Spark in Scala
+
+Machine Learning Library In Spark using ML lib library ,GraphX Library
+
+
+Database: Cassandra Database 
+
+
+
+Steps undertaken to implement Movie recommender system:
+
+1) First we have downloaded the movielens(ml-25m) dataset in our Microsoft Azure instance.
+
+2) We uploaded the  movielens data from Azure instance to Hadoop in HDFS
+
+3) we then connected to cassandra database in azure
+
+4) We  uploaded the dataset from azure instance to Hadoop in HDFS.
+
+5)We opened the Sandbox and logged in as MariaDev   using MariaDev login credentials.
+
+6)We then logged in as root user by entering our root password and then entered inside the directory “etc/yum.repos.d” 
+
+7)we then started Cassandra service and logged in to Cassandra Shell(CQLSH shell).This is how we connected to Cassandra database in azure
+
+8)Once we are inside Cassandra shell. We   created Keyspace in Cassandra database  , we  then  created  ‘ratings’ , ‘movies’ table inside keyspace.
+
+9)We then imported the data from movies.csv and ratings.csv file present in HDFS to the ratings , movies table present in Cassandra DB.
+
+10)After that we integrated Cassandra Database with Spark.
+
+11) we read the data present in  Cassandra Database to Spark using Scala.
+
+12) We then implemented User-User based collaborative filtering, Item-Item based collaborative filtering and ALS algorithm to recommend the movies to user.
+
+12a) User  based Collaborative filtering: 
+
+In User based collaborative filtering we found the similar users based on the number of common movie watched/rated by the other user and the distance between the user. We represented the most similar users  in the form of matrix using GraphX library.Using Pregel API in GraphX library we did the breadth first search on our graph to calculate the similarity between the user by building the edges and vertices for our graph.We found the top 10 most connected user in the (ml-25m) movie lens dataset.We then calculated the distance between all the user  from a given userID.We also computed the distance of a user from given userID.Finally we  calculated the RMSE value of User based collaborative filtering.
+
+
+
+12b) Item based collaborative filtering: In Item based collaborative filtering we found the similarity score between the movies by finding the cosine similarity between the movies user has watched with other movies present in movie lens dataset.we found the top 10 most similar movie for a given movie ordered by similarity score .We then calculated top 10 recommended movie for a given user We also calculated the predicted rating of movie by calculating weighted average  ratings of its 10 most similar movies. Finally we  found the RMSE value of Item based collaborative filtering.
+
+
+12c) Alternating least square(ALS) algorithm: We implemented ALS model using MLlib library in spark to build ALS model. We read dataset from Cassandra DB in spark.
+We  then converted the dataset in spark to data frame. We sliced the dataset into training and test set(80% training set and 20% test set). We have then trained the model and built the ALS algorithm on training set.
+we have done hyper parameter tuning  to build the optimal model for recommending the movies to user. The value of the parameter  that we found out was as listed below:
+rank =12, where rank is the number of latent factors.
+regParams=0.01 , where regParams is regularization parameter to avoid overfitting.
+numIterations= 20, where numIterations  is  number of times it will train the model.
+
+We recommended top 10  movie for a given user. we also predicted the top 10 recommended user for a given movie .Finally We  calculated the RMSE score for ALS algorithm.
